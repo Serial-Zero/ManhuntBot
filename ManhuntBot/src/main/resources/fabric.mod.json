@@ -1,38 +1,30 @@
 {
 	"schemaVersion": 1,
-	"id": "modid",
+	"id": "manhuntbot",
 	"version": "${version}",
-	"name": "Example mod",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"name": "Manhunt Bot",
+	"description": "Spawns a relentless hunter bot powered by Baritone pathfinding to chase you in single player.",
 	"authors": [
-		"Me!"
+		"ManhuntBot Team"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/example/manhuntbot"
 	},
-	"license": "CC0-1.0",
-	"icon": "assets/modid/icon.png",
+	"license": "MIT",
+	"icon": "assets/manhuntbot/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.example.ExampleMod"
+			"com.manhuntbot.ManhuntBotMod"
 		],
 		"client": [
-			"com.example.ExampleModClient"
+			"com.manhuntbot.client.ManhuntBotClient"
 		]
 	},
-	"mixins": [
-		"modid.mixins.json",
-		{
-			"config": "modid.client.mixins.json",
-			"environment": "client"
-		}
-	],
 	"depends": {
-		"fabricloader": ">=0.17.2",
-		"minecraft": "~1.21.10",
-		"java": ">=21",
+		"fabricloader": ">=0.14.21",
+		"minecraft": "~1.19.4",
+		"java": ">=17",
 		"fabric-api": "*"
 	},
 	"suggests": {

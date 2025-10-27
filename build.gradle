@@ -1,0 +1,11 @@
+
+tasks.named('compileClientJava') {
+    doFirst {
+        println('Client compile classpath: ' + classpath.asPath)
+    }
+}
+
+
+compileOnly files('libs/baritone-common-1.9.5.jar')
+clientCompileOnly files('libs/baritone-common-1.9.5.jar')
+

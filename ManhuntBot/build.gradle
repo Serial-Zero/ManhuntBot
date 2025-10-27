@@ -11,23 +11,53 @@ base {
 }
 
 repositories {
-	// Add repositories to retrieve artifacts from in here.
-	// You should only use this when depending on other mods because
-	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
-	// for more information about repositories.
+	// Add additional repositories here if needed.
+	mavenLocal()
+	maven {
+		name = "Fabric"
+		url = "https://maven.fabricmc.net/"
+	}
+	mavenCentral()
 }
 
 loom {
 	splitEnvironmentSourceSets()
 
 	mods {
-		"modid" {
+		manhuntbot {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
 		}
 	}
 
+}
+
+sourceSets {
+	client {
+		compileClasspath += sourceSets.main.compileClasspath
+		runtimeClasspath += sourceSets.main.runtimeClasspath
+	}
+}
+
+afterEvaluate {
+	configurations.named("clientImplementation").configure {
+		it.extendsFrom(configurations.getByName("implementation"))
+	}
+	configurations.named("clientRuntimeOnly").configure {
+		it.extendsFrom(configurations.getByName("runtimeOnly"))
+	}
+	configurations.named("clientCompileOnly").configure {
+		it.extendsFrom(configurations.getByName("compileOnly"))
+	}
+	configurations.findByName("clientModImplementation")?.let { cfg ->
+		cfg.extendsFrom(configurations.getByName("modImplementation"))
+	}
+	configurations.findByName("clientModRuntimeOnly")?.let { cfg ->
+		cfg.extendsFrom(configurations.getByName("modRuntimeOnly"))
+	}
+	configurations.findByName("clientModCompileOnly")?.let { cfg ->
+		cfg.extendsFrom(configurations.getByName("modCompileOnly"))
+	}
 }
 
 dependencies {
@@ -38,6 +68,13 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+	modImplementation files("libs/baritone-fabric-1.9.5.jar")
+	clientRuntimeOnly files("libs/nether-pathfinder-1.4.1.jar")
+	runtimeOnly files("libs/nether-pathfinder-1.4.1.jar")
+	modImplementation("net.fabricmc.fabric-api:fabric-networking-api-v1:1.3.6+ae9c4c6af4") {
+		transitive = false
+	}
 	
 }
 
@@ -50,7 +87,7 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 21
+	it.options.release = 17
 }
 
 java {
@@ -59,8 +96,8 @@ java {
 	// If you remove this line, sources will not be generated.
 	withSourcesJar()
 
-	sourceCompatibility = JavaVersion.VERSION_21
-	targetCompatibility = JavaVersion.VERSION_21
+	sourceCompatibility = JavaVersion.VERSION_17
+	targetCompatibility = JavaVersion.VERSION_17
 }
 
 jar {
